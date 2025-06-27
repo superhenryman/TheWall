@@ -60,7 +60,7 @@ def insert_post(post):
 def retrieve_data():
     with get_connection() as conn:
        cursor = conn.cursor()
-       cursor.execute("SELECT * FROM posts")
+       cursor.execute("SELECT * FROM posts ORDER BY id ASC")
        rows = cursor.fetchall()
        #jsondata = {index: item for index, item in enumerate(rows)}
     return jsonify(rows)
