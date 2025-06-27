@@ -64,7 +64,7 @@ def retrieve_data():
 def post():
     content = request.form.get("content")
     insert_post(clean(content))
-    return 200
+    return jsonify({"status": "ok"}), 200
 
 
 
