@@ -31,18 +31,33 @@ function handleError(error) {
 }
 
 async function getPosts() {
+    let posts = [];
     try {
         const rawData = await fetch("/posts", {
             method: "GET"
         });
         const json = await rawData.json();
-        console.log(json);
+        json.forEach(post => {
+            const id = post[0];
+            const content = post[1];
+            // do stuff
+            posts.push(content);
+        });
+        const container = document.getElementById("userposts");
+
+        posts.forEach(content => {
+            const postEl = document.createElement("div");
+            postEl.className = "post";
+            postEl.innerText = content;
+            container.appendChild(postEl);
+        });
     } catch (err) {
         console.log("Failed to fetch posts:", err);
-        handleError(`Failed to retrieve posts, error: ${err}`);
+        handleError(`Failed to retrieve posts or add them, error: ${err}`);
         return;
     }
 }
+
 document.addEventListener("DOMContentLoaded", () => {
     getPosts();
     document.getElementById("back").addEventListener("click", function(){closePostGUI();});
