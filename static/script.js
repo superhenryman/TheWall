@@ -5,6 +5,7 @@ const form = document.getElementById("post-form");
 
 function getClientId() {
     let clientId = localStorage.getItem("clientId");
+    console.log(clientId);
     if (!clientId) {
         clientId = crypto.randomUUID();
         localStorage.setItem("clientId", clientId);
@@ -18,9 +19,9 @@ async function isBanned() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: {
-            "userId": getClientId()
-        }
+        body: JSON.stringify({
+            userId: getClientId()
+        })
     })
     const json = await result.json();
     return json.status;
