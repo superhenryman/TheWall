@@ -68,7 +68,7 @@ def retrieve_data():
 def post():
     content = request.form.get("content")
     insert_post(clean(content))
-    return redirect(home())
+    return redirect("/")
 
 if __name__ == "__main__": app.run(debug=True)
 
