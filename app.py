@@ -51,7 +51,7 @@ def insert_post(post):
         except Exception as e:
             logging.error(f"Error occured when inserting the post contents. {e}")
 
-@app.route("/posts", method=["POST"])
+@app.route("/posts", methods=["POST"])
 def retrieve_data():
     with get_connection() as conn:
        cursor = conn.cursor()

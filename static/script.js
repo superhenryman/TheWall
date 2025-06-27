@@ -36,7 +36,7 @@ async function getPosts() {
             method: "GET"
         });
         const json = await rawData.json();
-        
+        console.log(json);
     } catch (err) {
         console.log("Failed to fetch posts:", err);
         handleError(`Failed to retrieve posts, error: ${err}`);
