@@ -28,7 +28,7 @@ async function isBanned() {
 
 isBanned().then(result => {
   if (result === "true") {
-    document.body.innerText = '<p style="text-align:center; font-size: 40px;">You have been banned.</p>';
+    document.body.innerHTML = '<p style="text-align:center; font-size: 40px;">You have been banned.</p>';
   }
 });
 
