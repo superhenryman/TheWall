@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 import html
 import logging
 import psycopg2
@@ -42,6 +42,10 @@ def init_db():
 
 init_db()
 
+@app.route("/")
+def home():
+    return render_template("index.html")
+
 def insert_post(post):
     with get_connection() as conn:
         try:
@@ -64,13 +68,7 @@ def retrieve_data():
 def post():
     content = request.form.get("content")
     insert_post(clean(content))
-    return jsonify({"status": "ok"}), 200
-
-
-
-@app.route("/")
-def home():
-    return render_template("index.html")
+    return redirect(home())
 
 if __name__ == "__main__": app.run(debug=True)
 
