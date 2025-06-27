@@ -36,6 +36,14 @@ body, html, * {
   cursor: url('cursor.cur') 0 0, auto;
 }
 
+#psa {
+  font-size: 18px;
+  color: #f5f5f5;
+  margin-bottom: 10px;
+  animation: fadeIn 1.2s ease forwards;
+  cursor: url('cursor.cur') 0 0, auto; 
+}
+
 #post {
   margin-top: 10px;
   padding: 8px 16px;
