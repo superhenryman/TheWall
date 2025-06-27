@@ -1,6 +1,29 @@
 const postButton = document.getElementById("post");
 const errorBuffer = document.getElementById("error");
 const sendPostButton = document.getElementById("post-button");
+const form = document.getElementById("post-form");
+
+function getClientId() {
+    let clientId = localStorage.getItem("clientId");
+    if (!clientId) {
+        clientId = crypto.randomUUID();
+        localStorage.setItem("clientId", clientId);
+    }
+    return clientId;
+}
+
+async function isBanned() {
+    const result = await fetch("/isbanned", {
+        method: "POST",
+        body: getClientId()
+    })
+    const json = await result.json();
+    return json.status;
+}
+
+const result = await isBanned();
+if (result === true) {document.getElementsByTagName("body")[0].innerText = "You've been banned.";}
+
 function showPostGUI() {
     document.getElementById('post-gui').style.display = "block";
     document.getElementById("post-form").style.display =  "flex";
@@ -24,11 +47,17 @@ function closePostGUI() {
 }
 
 
-
 function handleError(error) {
     errorBuffer.innerText = `${error}`;
     errorBuffer.style.display = "block";
 }
+
+const userIdInput = document.createElement("input");
+userIdInput.type = "hidden";
+userIdInput.name = "userId";
+userIdInput.id = "userId";
+userIdInput.value = getClientId();  // actual value, not placeholder
+form.appendChild(userIdInput);
 
 async function getPosts() {
     let posts = [];
@@ -60,14 +89,17 @@ async function getPosts() {
     }
     document.getElementById("loading").style.display = "none";
 }
-
+postButton.addEventListener('click', async function (){ await showPostGUI();});
 document.addEventListener("DOMContentLoaded", () => {
     getPosts();
     document.getElementById("back").addEventListener("click", function(){closePostGUI();});
-    postButton.addEventListener('click', function (){showPostGUI();});
-    
+
 });
 
 setInterval(async function() {
     await getPosts();
+    const result = await isBanned();
+    if (result === true) {
+        document.getElementsByTagName("body")[0].innerText = "You've been banned.";
+    }
 }, 10000);
