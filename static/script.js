@@ -68,4 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
 });
 
-document.getElementById("refresh").addEventListener("click", async function () {await getPosts()});
+setInterval(async function() {
+    await getPosts();
+}, 10000);
