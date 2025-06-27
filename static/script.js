@@ -21,8 +21,11 @@ async function isBanned() {
     return json.status;
 }
 
-const result = isBanned();
-if (result === true) {document.getElementsByTagName("body")[0].innerText = "You've been banned.";}
+isBanned().then(result => {
+  if (result === true) {
+    document.body.innerText = "You've been banned.";
+  }
+});
 
 function showPostGUI() {
     document.getElementById('post-gui').style.display = "block";
