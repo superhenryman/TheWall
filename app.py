@@ -11,7 +11,7 @@ database_url = os.getenv("DATABASE_URL")
 
 def clean(text: str) -> str:
     """ Function to prevent XSS (screw you, dirty hacker.) """
-    return str(html.escape(text), quote=True)
+    return str(html.escape(text, quote=True))
 
 def get_connection():
     retry_count = 5
