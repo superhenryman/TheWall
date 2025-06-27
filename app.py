@@ -60,7 +60,7 @@ def retrieve_data():
        jsondata = {index: item for index, item in enumerate(rows)}
     return jsonify(jsondata)
 
-@app.route("/post")
+@app.route("/post", methods=["POST"])
 def post():
     content = request.form.get("content")
     insert_post(clean(content))
