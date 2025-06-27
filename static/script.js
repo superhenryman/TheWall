@@ -32,6 +32,7 @@ function handleError(error) {
 
 async function getPosts() {
     let posts = [];
+    document.getElementById("loading").style.display = "block";
     try {
         const rawData = await fetch("/posts", {
             method: "GET"
@@ -54,8 +55,10 @@ async function getPosts() {
     } catch (err) {
         console.log("Failed to fetch posts:", err);
         handleError(`Failed to retrieve posts or add them, error: ${err}`);
+        document.getElementById("loading").style.display = "none";
         return;
     }
+    document.getElementById("loading").style.display = "none";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
