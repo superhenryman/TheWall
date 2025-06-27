@@ -1,0 +1,109 @@
+@font-face {
+  font-family: "Comic Sans MS";
+  src: url(comic.ttf);
+}
+
+#post-gui {
+    display: none; /* set to none in your HTML, turn to block for testing */
+    width: 500px;
+    margin: 20px auto;
+    background-color: #f0e0d6;
+    border: 1px solid #b7b7b7;
+    padding: 10px;
+}
+
+#post-form {
+    display: none;
+    flex-direction: column;
+}
+
+#content {
+    resize: vertical;
+    min-height: 100px;
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+    padding: 5px;
+    border: 1px solid #a9a9a9;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+}
+
+#post-button {
+    align-self: flex-start;
+    background-color: #d6d6d6;
+    color: #000;
+    border: 1px solid #888;
+    padding: 4px 10px;
+    font-size: 10pt;
+    cursor: pointer;
+}
+
+#post-button:hover {
+    background-color: #c0c0c0;
+}
+
+body {
+    background-image: url("wall.png");
+    font-family: "Comic Sans MS";
+}
+
+#error {
+    display: none;
+    color: red;
+}
+
+.header {
+    text-align: center;
+    font-size: 30px;
+    color: white;
+    margin-top: 20px;
+}
+
+#rules {
+    font-size: 40px;
+}
+
+
+.credits {
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    text-align: center;
+} 
+
+.post {
+  background-color: #fff9b1; /* pale yellow sticky note color */
+  border: 1.5px solid #e6d942;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  padding: 15px 20px;
+  margin: 15px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-size: 14px;
+  width: 250px;
+  position: relative;
+  transform: rotate(-1.5deg); /* slight tilt */
+  transition: transform 0.2s ease;
+}
+
+.post:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 4px 6px 12px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+
+/* Optional taped corner effect */
+.post::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  background: #f7f27a;
+  border: 1px solid #d6ce38;
+  transform: rotate(45deg);
+  box-shadow: inset 0 0 5px rgba(255,255,255,0.6);
+  z-index: 1;
+  border-radius: 2px;
+}
