@@ -45,7 +45,7 @@ async function getPosts() {
             posts.push(content);
         });
         const container = document.getElementById("userposts");
-
+        container.innerHTML = ""; // cleared!
         posts.forEach(content => {
             const postEl = document.createElement("div");
             postEl.className = "post";
