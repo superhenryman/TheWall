@@ -45,7 +45,7 @@ async function getPosts() {
     
 }
 document.addEventListener("DOMContentLoaded", () => {
-    //getPosts();
+    getPosts();
     document.getElementById("back").addEventListener("click", function(){closePostGUI();});
     postButton.addEventListener('click', function (){showPostGUI();});
 

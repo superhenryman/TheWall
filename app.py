@@ -55,7 +55,7 @@ def insert_post(post):
 def retrieve_data():
     with get_connection() as conn:
        cursor = conn.cursor()
-       cursor.execute("SELECT * FROM orders")
+       cursor.execute("SELECT * FROM posts")
        rows = cursor.fetchall()
        jsondata = {index: item for index, item in enumerate(rows)}
     return jsonify(jsondata)
