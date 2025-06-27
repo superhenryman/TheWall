@@ -1,109 +1,219 @@
-@font-face {
-  font-family: "Comic Sans MS";
-  src: url(comic.ttf);
-}
-
-#post-gui {
-    display: none; /* set to none in your HTML, turn to block for testing */
-    width: 500px;
-    margin: 20px auto;
-    background-color: #f0e0d6;
-    border: 1px solid #b7b7b7;
-    padding: 10px;
-}
-
-#post-form {
-    display: none;
-    flex-direction: column;
-}
-
-#content {
-    resize: vertical;
-    min-height: 100px;
-    font-family: "Courier New", monospace;
-    font-size: 10pt;
-    padding: 5px;
-    border: 1px solid #a9a9a9;
-    background-color: #ffffff;
-    margin-bottom: 10px;
-}
-
-#post-button {
-    align-self: flex-start;
-    background-color: #d6d6d6;
-    color: #000;
-    border: 1px solid #888;
-    padding: 4px 10px;
-    font-size: 10pt;
-    cursor: pointer;
-}
-
-#post-button:hover {
-    background-color: #c0c0c0;
-}
+@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
 
 body {
-    background-image: url("wall.png");
-    font-family: "Comic Sans MS";
+  background-image: url("wall.png");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  font-family: "Patrick Hand", cursive;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  cursor: url('cursor.cur') 0 0, auto;
 }
-
-#error {
-    display: none;
-    color: red;
+html, body {
+  min-height: 100vh;
 }
-
+body, html, * {
+    
+  cursor: url('cursor.cur') 0 0, auto !important;
+}
 .header {
-    text-align: center;
-    font-size: 30px;
-    color: white;
-    margin-top: 20px;
+  text-align: center;
+  font-size: 36px;
+  color: white;
+  margin-top: 30px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 1s ease forwards;
+  cursor: url('cursor.cur') 0 0, auto;
 }
 
 #rules {
-    font-size: 40px;
+  font-size: 18px;
+  color: #f5f5f5;
+  margin-bottom: 10px;
+  animation: fadeIn 1.2s ease forwards;
+  cursor: url('cursor.cur') 0 0, auto;
 }
 
+#post {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #ffda77;
+  border: 1px solid #e6c44b;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+  animation: fadeIn 1.4s ease forwards;
+  cursor: url('cursor.cur') 0 0, auto;
+}
 
-.credits {
-    position: fixed; 
-    bottom: 0; 
-    left: 0; 
-    width: 100%; 
-    text-align: center;
-} 
+#post:hover {
+  background-color: #ffe680;
+  transform: scale(1.05);
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+#post-gui {
+  display: none;
+  width: 500px;
+  margin: 30px auto;
+  background-color: #fff9b1;
+  border: 2px dashed #e6d942;
+  padding: 15px;
+  box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  animation: fadeIn 0.6s ease forwards;
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+#post-form {
+  display: none;
+  flex-direction: column;
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+#content {
+  resize: vertical;
+  min-height: 120px;
+  font-family: "Patrick Hand", cursive;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 10px;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  margin-bottom: 12px;
+  border-radius: 3px;
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+#post-button,
+#back {
+  align-self: flex-start;
+  background-color: #fffa8d;
+  color: #000;
+  border: 1px solid #c2ad38;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-right: 10px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, transform 0.2s;
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+#post-button:hover,
+#back:hover {
+  background-color: #fffeb2;
+  transform: scale(1.05);
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+#userposts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 30px;
+  cursor: url('cursor.cur') 0 0, auto;
+}
 
 .post {
-  background-color: #fff9b1; /* pale yellow sticky note color */
+  background: radial-gradient(circle at 30% 20%, #fffed1, #fff9b1);
   border: 1.5px solid #e6d942;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-  padding: 15px 20px;
-  margin: 15px;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  font-size: 14px;
-  width: 250px;
+  box-shadow: inset 0 -8px 16px rgba(255, 230, 0, 0.2),
+    inset 0 4px 8px rgba(255, 255, 255, 0.4), 6px 6px 14px rgba(0, 0, 0, 0.25);
+  padding: 18px 22px;
+  font-family: "Patrick Hand", cursive;
+  font-size: 15px;
+  line-height: 1.5;
+  width: 220px;
   position: relative;
-  transform: rotate(-1.5deg); /* slight tilt */
-  transition: transform 0.2s ease;
+  white-space: pre-wrap;
+  border-radius: 6px;
+  opacity: 0;
+  animation: fadeInSticky 0.5s ease forwards, bob 5s ease-in-out infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transform-origin: center center;
+  cursor: url('cursor.cur') 0 0, auto;
 }
 
 .post:hover {
-  transform: rotate(0deg) scale(1.05);
-  box-shadow: 4px 6px 12px rgba(0,0,0,0.3);
+  scale: 1.08;
   z-index: 10;
+  box-shadow: inset 0 -10px 18px rgba(255, 230, 0, 0.3),
+    8px 10px 20px rgba(0, 0, 0, 0.4);
+  transition: ease-in-out 0.2s;
+  cursor: url('cursor.cur') 0 0, auto;
 }
 
-/* Optional taped corner effect */
 .post::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 30px;
-  height: 30px;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-4deg);
+  width: 40px;
+  height: 18px;
   background: #f7f27a;
   border: 1px solid #d6ce38;
-  transform: rotate(45deg);
-  box-shadow: inset 0 0 5px rgba(255,255,255,0.6);
-  z-index: 1;
   border-radius: 2px;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+#error {
+  display: none;
+  color: red;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+.credits {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  padding: 6px 0;
+  font-family: "Patrick Hand", cursive;
+  cursor: url('cursor.cur') 0 0, auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInSticky {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(1deg);
+  }
 }
