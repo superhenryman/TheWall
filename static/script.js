@@ -15,7 +15,9 @@ function getClientId() {
 async function isBanned() {
     const result = await fetch("/isbanned", {
         method: "POST",
-        body: getClientId()
+        body: {
+            "userId": getClientId()
+        }
     })
     const json = await result.json();
     return json.status;
