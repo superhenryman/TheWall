@@ -104,6 +104,7 @@ def is_user_banned():
         cur = conn.cursor()
         cur.execute("SELECT EXISTS (SELECT 1 FROM banned WHERE userId = %s)", (user_id,))
         result = cur.fetchone()[0]  # This is True or False
+        print(result)
         cur.close()
         return jsonify({"status": str(result).lower()})
 
