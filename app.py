@@ -57,8 +57,8 @@ def retrieve_data():
        cursor = conn.cursor()
        cursor.execute("SELECT * FROM posts")
        rows = cursor.fetchall()
-       jsondata = {index: item for index, item in enumerate(rows)}
-    return jsonify(jsondata)
+       #jsondata = {index: item for index, item in enumerate(rows)}
+    return jsonify(rows)
 
 @app.route("/post", methods=["POST"])
 def post():

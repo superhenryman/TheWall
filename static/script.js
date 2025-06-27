@@ -42,7 +42,6 @@ async function getPosts() {
         handleError(`Failed to retrieve posts, error: ${err}`);
         return;
     }
-    
 }
 document.addEventListener("DOMContentLoaded", () => {
     getPosts();
