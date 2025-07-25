@@ -28,7 +28,6 @@ def get_connection():
 def init_db():
     try:
         with get_connection() as conn:
-            conn = get_connection()
             cur = conn.cursor()
             cur.execute("""
             CREATE TABLE IF NOT EXISTS posts(
@@ -94,7 +93,7 @@ def init_banned_db():
             cur.close()
             conn.close()
     except Exception as e:
-        logging.erorr(f"Error occured preparing the banned database. {e}")
+        logging.error(f"Error occured preparing the banned database. {e}")
 
 init_banned_db()
 @app.route("/isbanned", methods=["POST"])
