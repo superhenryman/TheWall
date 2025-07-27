@@ -3,6 +3,8 @@ const errorBuffer = document.getElementById("error");
 const sendPostButton = document.getElementById("post-button");
 const form = document.getElementById("post-form");
 
+
+
 function getClientId() {
     let clientId = localStorage.getItem("clientId");
     if (!clientId) {
@@ -10,6 +12,57 @@ function getClientId() {
         localStorage.setItem("clientId", clientId);
     }
     return clientId;
+}
+
+
+
+async function getSignature() {
+    const clientId = getClientId();
+    if (!clientId) {
+        handleError("You don't have a clientID, try refreshing your page.");
+        localStorage.setItem("clientId", clientId);
+    }
+    const response = await fetch("/get_signature", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            clientId: clientId
+        })
+    });
+    if (!response.ok) {
+        handleError("Could not recieve signature. You can't do anything.");
+    }
+    const data = await response.json();
+    if (data.signature === null || data.signature === undefined) { // i'm scared of this if statement
+        localStorage.setItem("signature", signature);
+        return data.signature;
+    }
+}
+
+async function deletePost() {
+    const signature = await getSignature();
+    const cliendId = getClientId();
+    const response = await fetch("/deletePost", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            clientId: cliendId,
+            signature: signature
+        })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        if (data.status === "deleted") {
+            console.log("Post deleted!");
+        }
+    } else {
+        console.error("Delete failed");
+    }
 }
 
 async function isBanned() {
@@ -78,15 +131,17 @@ async function getPosts() {
         json.forEach(post => {
             const id = post[0];
             const content = post[1];
+            const clientId = post[2];
             // do stuff
-            posts.push(content);
+            posts.push(content, clientId);
         });
         const container = document.getElementById("userposts");
         container.innerHTML = ""; // cleared!
-        posts.forEach(content => {
+        posts.forEach(content, clientId => {
             const postEl = document.createElement("div");
             postEl.className = "post";
             postEl.innerText = content;
+            postEl.dataset.clientId = clientId;
             container.appendChild(postEl);
         });
     } catch (err) {
@@ -102,6 +157,34 @@ document.addEventListener("DOMContentLoaded", () => {
     getPosts();
     document.getElementById("back").addEventListener("click", function(){closePostGUI();});
 
+});
+
+// main.
+form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const content = document.getElementById("content").value;
+    const userId = getClientId();
+    const signature = localStorage.getItem("signature");
+
+    const response = await fetch("/post", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            content: content,
+            userId: userId,
+            signature: signature
+        })
+    });
+
+    if (response.ok) {
+        closePostGUI();
+        await getPosts();
+    } else {
+        handleError("Could not post.");
+    }
 });
 
 setInterval(async function() {
