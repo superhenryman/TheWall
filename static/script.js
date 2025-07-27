@@ -128,10 +128,9 @@ async function getPosts() {
     let posts = [];
     document.getElementById("loading").style.display = "block";
     try {
-        const rawData = await fetch("/posts", {
-            method: "GET"
-        });
+        const rawData = await fetch("/posts", { method: "GET" });
         const json = await rawData.json();
+
         json.forEach(post => {
             const id = post[0];
             const content = post[1];
@@ -140,19 +139,31 @@ async function getPosts() {
         });
 
         const container = document.getElementById("userposts");
-        container.innerHTML = ""; // cleared
+        container.innerHTML = "";
 
         posts.forEach(({ content, clientId, id }) => {
             const postEl = document.createElement("div");
             postEl.className = "post";
             postEl.innerText = content;
             postEl.dataset.clientId = clientId;
-            postEl.data.set.id = id;
+            postEl.dataset.id = id;
+
+            if (clientId === getClientId()) {
+                const deleteBtn = document.createElement("button");
+                deleteBtn.innerText = "🗑️ Delete";
+                deleteBtn.onclick = async () => {
+                    await deletePost(id);
+                    postEl.remove();
+                };
+                postEl.appendChild(deleteBtn);
+            }
+
             container.appendChild(postEl);
         });
+
     } catch (err) {
         console.log("Failed to fetch posts:", err);
-        handleError(`Failed to retrieve posts or add them, error: ${err}`);
+        handleError(`Failed to retrieve posts or add them: ${err}`);
     } finally {
         document.getElementById("loading").style.display = "none";
     }
