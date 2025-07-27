@@ -132,12 +132,13 @@ async function getPosts() {
             const id = post[0];
             const content = post[1];
             const clientId = post[2];
-            // do stuff
-            posts.push(content, clientId);
+            posts.push({ content, clientId });
         });
+
         const container = document.getElementById("userposts");
-        container.innerHTML = ""; // cleared!
-        posts.forEach(content, clientId => {
+        container.innerHTML = ""; // cleared
+
+        posts.forEach(({ content, clientId }) => {
             const postEl = document.createElement("div");
             postEl.className = "post";
             postEl.innerText = content;
@@ -147,11 +148,11 @@ async function getPosts() {
     } catch (err) {
         console.log("Failed to fetch posts:", err);
         handleError(`Failed to retrieve posts or add them, error: ${err}`);
+    } finally {
         document.getElementById("loading").style.display = "none";
-        return;
     }
-    document.getElementById("loading").style.display = "none";
 }
+
 postButton.addEventListener('click', async function (){ await showPostGUI();});
 document.addEventListener("DOMContentLoaded", () => {
     getPosts();
