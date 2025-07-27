@@ -22,7 +22,7 @@ def get_connection():
             conn = psycopg2.connect(database_url)
             return conn
         except Exception as e:
-            print(f"Attempt {i} failed: {e}")
+            logging.error(f"Attempt {i} failed: {e}")
             time.sleep(2 ** i)
     raise Exception("I can't connect :(")
 
@@ -103,8 +103,7 @@ def is_user_banned():
     with get_connection() as conn:
         cur = conn.cursor()
         cur.execute("SELECT EXISTS (SELECT 1 FROM banned WHERE userId = %s)", (user_id,))
-        result = cur.fetchone()[0]  # This is True or False
-        print(result)
+        result = cur.fetchone()[0]
         cur.close()
         return jsonify({"status": str(result).lower()})
 
@@ -162,7 +161,7 @@ def deletePost():
             cur.close()
             return jsonify({"status": "gone"})
         except Exception as e:
-            print(e)
+            logging.error(e)
             return jsonify({"error": "unexpected error occured, what the fuck?!"})
         
 

@@ -10,5 +10,5 @@ def sign_client_id(client_id: str) -> str:
 
 
 def verify_signature(client_id: str, signature: str) -> bool:
-    expected_sig = sign_client_id(client_id, secret_key)
+    expected_sig = sign_client_id(client_id)
     return hmac.compare_digest(expected_sig, signature)
