@@ -147,16 +147,17 @@ def deletePost():
             return jsonify({"error": "Where's your JSON? did you forget it like how your dad forgot you?"})
         client_id = data.get("clientId")
         signature = data.get("signature")
-        if not client_id or not signature: return jsonify({
+        postId = data.get("postId")
+        if not client_id or not signature or not postId: return jsonify({
             "error": 'Why.'
         })
         expected_sig = sign_client_id(client_id)
-        if not verify_signature(client_id, expected_sig):
+        if not verify_signature(client_id, signature):
             return jsonify({"error": "Thought you could trick me, asshole?! You can't! Suck my balls!"}), 400
         
         try:
             cur = conn.cursor()
-            cur.execute("DELETE FROM posts where userID = %s", (client_id, ))
+            cur.execute("DELETE FROM posts where id= %s", (postId, ))
             conn.commit()
             cur.close()
             return jsonify({"status": "gone"})

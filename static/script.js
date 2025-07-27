@@ -43,9 +43,10 @@ async function getSignature() {
 
 }
 
-async function deletePost() {
+async function deletePost(postId) {
     const signature = await getSignature();
     const cliendId = getClientId();
+    
     const response = await fetch("/deletePost", {
         method: "POST",
         headers: {
@@ -53,7 +54,8 @@ async function deletePost() {
         },
         body: JSON.stringify({
             clientId: cliendId,
-            signature: signature
+            signature: signature,
+            postId: postId
         })
     });
 
@@ -134,17 +136,18 @@ async function getPosts() {
             const id = post[0];
             const content = post[1];
             const clientId = post[2];
-            posts.push({ content, clientId });
+            posts.push({ content, clientId, id });
         });
 
         const container = document.getElementById("userposts");
         container.innerHTML = ""; // cleared
 
-        posts.forEach(({ content, clientId }) => {
+        posts.forEach(({ content, clientId, id }) => {
             const postEl = document.createElement("div");
             postEl.className = "post";
             postEl.innerText = content;
             postEl.dataset.clientId = clientId;
+            postEl.data.set.id = id;
             container.appendChild(postEl);
         });
     } catch (err) {
