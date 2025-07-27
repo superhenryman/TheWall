@@ -20,7 +20,6 @@ async function getSignature() {
     const clientId = getClientId();
     if (!clientId) {
         handleError("You don't have a clientID, try refreshing your page.");
-        localStorage.setItem("clientId", clientId);
     }
     const response = await fetch("/get_signature", {
         method: "POST",
@@ -33,12 +32,15 @@ async function getSignature() {
     });
     if (!response.ok) {
         handleError("Could not recieve signature. You can't do anything.");
+        return null;
     }
     const data = await response.json();
     if (data.signature === null || data.signature === undefined) { // i'm scared of this if statement
-        localStorage.setItem("signature", signature);
-        return data.signature;
+        return null;
     }
+    localStorage.setItem("signature", data.signature);
+    return data.signature;
+
 }
 
 async function deletePost() {
