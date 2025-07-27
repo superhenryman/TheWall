@@ -168,7 +168,7 @@ form.addEventListener("submit", async function (e) {
 
     const content = document.getElementById("content").value;
     const userId = getClientId();
-    const signature = localStorage.getItem("signature");
+    const signature = await getSignature();
 
     const response = await fetch("/post", {
         method: "POST",

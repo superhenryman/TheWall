@@ -147,7 +147,7 @@ def deletePost():
             return jsonify({"error": "Where's your JSON? did you forget it like how your dad forgot you?"})
         client_id = data.get("clientId")
         signature = data.get("signature")
-        if not client_id or signature: return jsonify({
+        if not client_id or not signature: return jsonify({
             "error": 'Why.'
         })
         expected_sig = sign_client_id(client_id)
