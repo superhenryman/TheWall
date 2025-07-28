@@ -144,7 +144,7 @@ async function getPosts() {
         posts.forEach(({ content, clientId, id }) => {
             const postEl = document.createElement("div");
             postEl.className = "post";
-            postEl.innerText = content;
+            postEl.innerHTML = content;
             postEl.dataset.clientId = clientId;
             postEl.dataset.id = id;
 
