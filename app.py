@@ -8,6 +8,7 @@ from security import verify_signature, sign_client_id
 import bleach
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(16))
 database_url = os.getenv("DATABASE_URL")
 SECRET_ADMIN_KEY = os.getenv("PASSWORD")
 app.config.update(
