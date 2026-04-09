@@ -4,7 +4,7 @@ import logging
 import psycopg2
 import os
 import time
-from security import verify_signature, sign_client_id
+from security import sign_client_id
 import bleach
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
@@ -136,15 +136,6 @@ def retrieve_data():
        rows = cursor.fetchall()
        #jsondata = {index: item for index, item in enumerate(rows)}
     return jsonify(rows)
-
-@app.route("/get_signature", methods=["POST"])
-def get_signature():
-    data = request.json
-    if not data:
-        return jsonify({"error": "Where's your JSON? did you forget it like how your dad forgot you?"})
-    return jsonify({
-        "signature": sign_client_id(data.get("clientId"))
-    }), 200
 
 @app.route("/deletePost", methods=["POST"])
 def deletePost():
