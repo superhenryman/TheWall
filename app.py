@@ -1,5 +1,7 @@
 import secrets
 from flask import Flask, render_template, request, jsonify, redirect, abort, session
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import logging
 import psycopg2
 import os
@@ -17,6 +19,13 @@ app.config.update(
     SESSION_COOKIE_SAMESITE="Lax",
     SESSION_COOKIE_SECURE=True
 )   
+def get_uid():
+    return session.get("uid", "unknown")
+limiter = Limiter(
+    key_func=get_uid,
+    app=app,
+    default_limits=[]
+)
 csrf.init_app(app)
 def clean(text: str) -> str:
     """ Function to prevent XSS (screw you, dirty hacker.) """
@@ -144,6 +153,8 @@ def retrieve_data():
     return jsonify(rows)
 
 @app.route("/deletePost", methods=["POST"])
+@limiter.limit("3 per minute", key_func=get_uid)
+@limiter.limit("5 per minute", key_func=get_remote_address)
 def deletePost():
     with get_connection() as conn:
         uid = session.get("uid")
@@ -168,6 +179,8 @@ def deletePost():
         
 
 @app.route("/post", methods=["POST"])
+@limiter.limit("3 per minute", key_func=get_uid)
+@limiter.limit("5 per minute", key_func=get_remote_address)
 def post():
     data = request.get_json()
     content = clean(data.get("content"))
