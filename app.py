@@ -114,7 +114,7 @@ def is_user_banned():
 @app.route("/")
 def home():
     if "uid" not in session:
-        session["uid"] = secrets.token.hex(32)
+        session["uid"] = secrets.token_hex(32)
     return render_template("index.html")
 
 def insert_post(post, userID):
