@@ -116,7 +116,7 @@ init_banned_db()
 @app.route("/isbanned", methods=["GET"])
 def is_user_banned_route():
     user_id = session.get("uid")
-    return jsonify({"status": str(is_user_banned(user_id)).lower()})
+    return jsonify({"status": is_user_banned(user_id)})
 
 @app.route("/")
 def home():
