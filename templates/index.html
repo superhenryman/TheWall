@@ -36,7 +36,10 @@
         <p style="display: inline;">Powered by </p>
         <img src="/static/python.png" width="25" height="25" alt="python">
     </div>
-    <script> myID = "{{ uid }}"; </script>
+    <script> 
+    const myID = "{{ uid }}";
+    const csrfToken = "{{ csrf_token() }}"; 
+    </script>
     <script src="/static/script.js"></script>
 </body>
 </html>

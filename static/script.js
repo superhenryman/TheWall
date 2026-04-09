@@ -94,7 +94,7 @@ async function getPosts() {
             postEl.dataset.clientId = clientId;
             postEl.dataset.id = id;
 
-            if (clientId === getClientId()) {
+            if (clientId === myID) {
                 const deleteBtn = document.createElement("button");
                 deleteBtn.innerText = "🗑️ Delete";
                 deleteBtn.onclick = async () => {
