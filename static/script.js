@@ -127,8 +127,6 @@ form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const content = document.getElementById("content").value;
-    const userId = getClientId();
-    const signature = await getSignature();
 
     const response = await fetch("/post", {
         method: "POST",
@@ -137,8 +135,6 @@ form.addEventListener("submit", async function (e) {
         },
         body: JSON.stringify({
             content: content,
-            userId: userId,
-            signature: signature
         })
     });
 

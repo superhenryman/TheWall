@@ -173,11 +173,6 @@ def post():
     data = request.get_json()
     content = clean(data.get("content"))
     userId = session.get("uid")
-    signature = data.get("signature")
-    if not verify_signature(userId, signature):
-        return jsonify({
-            "error": '<img src="https://thewall.up.railway.app/static/teto.gif" alt="teto">'
-        })
     insert_post(content, userId)
     return redirect("/") # don't ask why i do this, it works this way trust me
 
