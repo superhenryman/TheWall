@@ -102,9 +102,9 @@ def init_banned_db():
         logging.error(f"Error occured preparing the banned database. {e}")
 
 init_banned_db()
-@app.route("/isbanned", methods=["POST"])
+@app.route("/isbanned", methods=["GET"])
 def is_user_banned():
-    user_id = request.json.get("userId")
+    user_id = session.get("uid")
     with get_connection() as conn:
         cur = conn.cursor()
         cur.execute("SELECT EXISTS (SELECT 1 FROM banned WHERE userId = %s)", (user_id,))
@@ -116,7 +116,7 @@ def is_user_banned():
 def home():
     if "uid" not in session:
         session["uid"] = secrets.token_hex(32)
-    return render_template("index.html")
+    return render_template("index.html", uid=session["uid"])
 
 def insert_post(post, userID):
     with get_connection() as conn:
@@ -149,22 +149,17 @@ def get_signature():
 @app.route("/deletePost", methods=["POST"])
 def deletePost():
     with get_connection() as conn:
+        uid = session.get("uid")
         data = request.json
         if not data:
-            return jsonify({"error": "Where's your JSON? did you forget it like how your dad forgot you?"})
-        client_id = data.get("clientId")
-        signature = data.get("signature")
+            return jsonify({"error": "Invalid Input"}), 400
         postId = data.get("postId")
-        if not client_id or not signature or not postId: return jsonify({
-            "error": 'Why.'
-        })
-        expected_sig = sign_client_id(client_id)
-        if not verify_signature(client_id, signature):
-            return jsonify({"error": "Thought you could trick me, asshole?! You can't! Suck my balls!"}), 400
-        
+        if not postId: return jsonify({
+            "error": 'Invalid Input'
+        }), 400
         try:
             cur = conn.cursor()
-            cur.execute("DELETE FROM posts where id= %s", (postId, ))
+            cur.execute("DELETE FROM posts where id= %s AND userId= %s", (postId, uid))
             conn.commit()
             cur.close()
             return jsonify({"status": "gone"})
@@ -177,7 +172,7 @@ def deletePost():
 def post():
     data = request.get_json()
     content = clean(data.get("content"))
-    userId = data.get("userId")
+    userId = session.get("uid")
     signature = data.get("signature")
     if not verify_signature(userId, signature):
         return jsonify({

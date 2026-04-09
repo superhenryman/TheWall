@@ -3,53 +3,14 @@ const errorBuffer = document.getElementById("error");
 const sendPostButton = document.getElementById("post-button");
 const form = document.getElementById("post-form");
 
-function getClientId() {
-    let clientId = localStorage.getItem("clientId");
-    if (!clientId) {
-        clientId = crypto.randomUUID();
-        localStorage.setItem("clientId", clientId);
-    }
-    return clientId;
-}
-async function getSignature() {
-    const clientId = getClientId();
-    if (!clientId) {
-        handleError("You don't have a clientID, try refreshing your page.");
-    }
-    const response = await fetch("/get_signature", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            clientId: clientId
-        })
-    });
-    if (!response.ok) {
-        handleError("Could not recieve signature. You can't do anything.");
-        return null;
-    }
-    const data = await response.json();
-    if (data.signature === null || data.signature === undefined) { // i'm scared of this if statement
-        return null;
-    }
-    localStorage.setItem("signature", data.signature);
-    return data.signature;
 
-}
-
-async function deletePost(postId) {
-    const signature = await getSignature();
-    const cliendId = getClientId();
-    
+async function deletePost(postId) {  
     const response = await fetch("/deletePost", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            clientId: cliendId,
-            signature: signature,
             postId: postId
         })
     });
@@ -66,13 +27,10 @@ async function deletePost(postId) {
 
 async function isBanned() {
     const result = await fetch("/isbanned", {
-        method: "POST",
+        method: "GET",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            userId: getClientId()
-        })
     })
     const json = await result.json();
     return json.status;
@@ -111,13 +69,6 @@ function handleError(error) {
     errorBuffer.innerText = `${error}`;
     errorBuffer.style.display = "block";
 }
-
-const userIdInput = document.createElement("input");
-userIdInput.type = "hidden";
-userIdInput.name = "userId";
-userIdInput.id = "userId";
-userIdInput.value = getClientId();  // actual value, not placeholder
-form.appendChild(userIdInput);
 
 async function getPosts() {
     let posts = [];
