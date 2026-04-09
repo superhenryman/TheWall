@@ -8,7 +8,8 @@ async function deletePost(postId) {
     const response = await fetch("/deletePost", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken 
         },
         body: JSON.stringify({
             postId: postId

@@ -105,6 +105,7 @@ def init_banned_db():
         logging.error(f"Error occured preparing the banned database. {e}")
 
 init_banned_db()
+@csrf.exempt
 @app.route("/isbanned", methods=["GET"])
 def is_user_banned():
     user_id = session.get("uid")
@@ -130,7 +131,7 @@ def insert_post(post, userID):
             cur.close()
         except Exception as e:
             logging.error(f"Error inserting post: {e}")
-
+@csrf.exempt
 @app.route("/posts", methods=["GET"])
 def retrieve_data():
     with get_connection() as conn:
