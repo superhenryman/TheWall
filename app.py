@@ -1,19 +1,23 @@
-from flask import Flask, render_template, request, jsonify, redirect, abort
-import html
+import secrets
+from flask import Flask, render_template, request, jsonify, redirect, abort, session
 import logging
 import psycopg2
 import os
 import time
 from security import verify_signature, sign_client_id
-
+import bleach
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 database_url = os.getenv("DATABASE_URL")
 SECRET_ADMIN_KEY = os.getenv("PASSWORD")
-
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=True
+)   
 def clean(text: str) -> str:
     """ Function to prevent XSS (screw you, dirty hacker.) """
-    return str(html.escape(text, quote=True))
+    return bleach.clean(text=text)
 
 def get_connection():
     retry_count = 5
@@ -109,6 +113,8 @@ def is_user_banned():
 
 @app.route("/")
 def home():
+    if "uid" not in session:
+        session["uid"] = secrets.token.hex(32)
     return render_template("index.html")
 
 def insert_post(post, userID):

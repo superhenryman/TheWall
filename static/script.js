@@ -3,19 +3,6 @@ const errorBuffer = document.getElementById("error");
 const sendPostButton = document.getElementById("post-button");
 const form = document.getElementById("post-form");
 
-
-
-function getClientId() {
-    let clientId = localStorage.getItem("clientId");
-    if (!clientId) {
-        clientId = crypto.randomUUID();
-        localStorage.setItem("clientId", clientId);
-    }
-    return clientId;
-}
-
-
-
 async function getSignature() {
     const clientId = getClientId();
     if (!clientId) {
@@ -144,7 +131,7 @@ async function getPosts() {
         posts.forEach(({ content, clientId, id }) => {
             const postEl = document.createElement("div");
             postEl.className = "post";
-            postEl.innerHTML = content;
+            postEl.innerText = content;
             postEl.dataset.clientId = clientId;
             postEl.dataset.id = id;
 
