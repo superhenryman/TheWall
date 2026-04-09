@@ -131,7 +131,8 @@ form.addEventListener("submit", async function (e) {
     const response = await fetch("/post", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken 
         },
         body: JSON.stringify({
             content: content,
