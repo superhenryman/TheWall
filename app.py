@@ -4,10 +4,11 @@ import logging
 import psycopg2
 import os
 import time
-from security import sign_client_id
+from flask_wtf import CSRFProtect
 import bleach
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(16))
 database_url = os.getenv("DATABASE_URL")
 SECRET_ADMIN_KEY = os.getenv("PASSWORD")
@@ -16,6 +17,7 @@ app.config.update(
     SESSION_COOKIE_SAMESITE="Lax",
     SESSION_COOKIE_SECURE=True
 )   
+csrf.init_app(app)
 def clean(text: str) -> str:
     """ Function to prevent XSS (screw you, dirty hacker.) """
     return bleach.clean(text=text)
@@ -53,6 +55,7 @@ init_db()
 def require_password():
     if request.headers.get('X-API-KEY') != SECRET_ADMIN_KEY:
         abort(403)
+
 
 @app.route("/ban")
 def add_ban():
