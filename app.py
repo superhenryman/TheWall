@@ -20,7 +20,7 @@ app.config.update(
 csrf.init_app(app)
 def clean(text: str) -> str:
     """ Function to prevent XSS (screw you, dirty hacker.) """
-    return bleach.clean(text=text)
+    return bleach.clean(text=text, tags=[], attributes={}, strip=True)
 
 def get_connection():
     retry_count = 5
@@ -55,9 +55,9 @@ init_db()
 def require_password():
     if request.headers.get('X-API-KEY') != SECRET_ADMIN_KEY:
         abort(403)
-
-
-@app.route("/ban")
+#admin routes are designed to be used with my own tools
+@csrf.exempt
+@app.route("/ban", methods=["POST"])
 def add_ban():
     require_password()
     userid = request.args.get("userID")
@@ -68,7 +68,8 @@ def add_ban():
         cur.close()
         return f"Banned {userid}!"
     
-@app.route("/removeban")
+@csrf.exempt
+@app.route("/removeban", methods=["DELETE"])
 def unban():
     require_password()
     userid = request.args.get("userid")
@@ -78,8 +79,8 @@ def unban():
         conn.commit()
         cur.close()
         return f"Unbanned {userid}!"
-    
-@app.route("/viewbanned")
+@csrf.exempt    
+@app.route("/viewbanned", methods=["GET"])
 def view():
     require_password()
     with get_connection() as conn:
@@ -103,18 +104,19 @@ def init_banned_db():
             conn.close()
     except Exception as e:
         logging.error(f"Error occured preparing the banned database. {e}")
-
-init_banned_db()
-@csrf.exempt
-@app.route("/isbanned", methods=["GET"])
-def is_user_banned():
-    user_id = session.get("uid")
+def is_user_banned(user_id):
     with get_connection() as conn:
         cur = conn.cursor()
         cur.execute("SELECT EXISTS (SELECT 1 FROM banned WHERE userId = %s)", (user_id,))
         result = cur.fetchone()[0]
         cur.close()
-        return jsonify({"status": str(result).lower()})
+        return result
+init_banned_db()
+@csrf.exempt
+@app.route("/isbanned", methods=["GET"])
+def is_user_banned_route():
+    user_id = session.get("uid")
+    return jsonify({"status": str(is_user_banned(user_id)).lower()})
 
 @app.route("/")
 def home():
@@ -145,6 +147,8 @@ def retrieve_data():
 def deletePost():
     with get_connection() as conn:
         uid = session.get("uid")
+        if is_user_banned(uid):
+            return jsonify({"error": "You are banned."}), 403
         data = request.json
         if not data:
             return jsonify({"error": "Invalid Input"}), 400
@@ -168,6 +172,8 @@ def post():
     data = request.get_json()
     content = clean(data.get("content"))
     userId = session.get("uid")
+    if is_user_banned(userId):
+        return jsonify({"error": "You are banned."}), 403   
     insert_post(content, userId)
     return redirect("/") # don't ask why i do this, it works this way trust me
 
