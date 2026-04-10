@@ -106,6 +106,8 @@ async function getPosts() {
                 };
                 postEl.appendChild(deleteBtn);
             }
+            const img = document.createElement("img");
+            img.src = "/static/lesbian.png";
 
             container.appendChild(postEl);
         });
