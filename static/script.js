@@ -16,7 +16,9 @@ async function deletePost(postId) {
             postId: postId
         })
     });
-
+    if (response.status === 403) {
+        banned = true;
+    }
     if (response.ok) {
         const data = await response.json();
         if (data.status === "deleted") {
@@ -138,7 +140,9 @@ form.addEventListener("submit", async function (e) {
             content: content,
         })
     });
-
+    if (response.status === 403) {
+        banned = true;
+    }
     if (response.ok) {
         closePostGUI();
         await getPosts();
@@ -150,7 +154,7 @@ form.addEventListener("submit", async function (e) {
 setInterval(async function() {
     await getPosts();
     const result = await isBanned();
-    if (result) {
+    if (result || banned) {
         banned = true;
         document.getElementById("psa").innerText = "You've been banned. You can still view posts, but cannot post or delete.";
     }
