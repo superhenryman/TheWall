@@ -135,6 +135,8 @@ form.addEventListener("input", function() {
     lengthLabel.innerText = `${content.length}/500`;
     if (content.length > 500) {
         lengthLabel.style.color = "red";
+    } else {
+        lengthLabel.style.color = "black";
     }
 });
 // main.
