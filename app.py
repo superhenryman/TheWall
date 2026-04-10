@@ -134,6 +134,10 @@ def home():
     return render_template("index.html", uid=session["uid"])
 
 def insert_post(post, userID):
+    if post.strip() == "":
+        return -1
+    if len(post) > 500:
+        return -1
     with get_connection() as conn:
         try:
             cur = conn.cursor()
@@ -187,7 +191,8 @@ def post():
     userId = session.get("uid")
     if is_user_banned(userId):
         return jsonify({"error": "You are banned."}), 403   
-    insert_post(content, userId)
+    if insert_post(content, userId) == -1:
+        return jsonify({"error": "Invalid post content."}), 400
     return redirect("/") # don't ask why i do this, it works this way trust me
 
 
