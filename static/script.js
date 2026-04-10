@@ -5,7 +5,10 @@ const form = document.getElementById("post-form");
 let banned = false;
 
 async function deletePost(postId) { 
-    if (banned) { return handleError("You are banned from posting."); } 
+    if (banned) { 
+        handleError("You are banned from deleting."); 
+        return -1;
+    } 
     const response = await fetch("/deletePost", {
         method: "POST",
         headers: {
@@ -96,8 +99,10 @@ async function getPosts() {
                 const deleteBtn = document.createElement("button");
                 deleteBtn.innerText = "🗑️ Delete";
                 deleteBtn.onclick = async () => {
-                    await deletePost(id);
-                    postEl.remove();
+                    const result = await deletePost(id);
+                    if (result !== -1) {
+                        postEl.remove();
+                    }
                 };
                 postEl.appendChild(deleteBtn);
             }
