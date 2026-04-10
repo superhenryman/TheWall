@@ -146,7 +146,13 @@ body, html, * {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   transform-origin: center center;
   cursor: url('cursor.cur') 0 0, auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-height: 300px;
+  overflow-y: auto;
 }
+
 
 .post:hover {
   scale: 1.08;
