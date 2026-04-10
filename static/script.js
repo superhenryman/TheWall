@@ -2,9 +2,10 @@ const postButton = document.getElementById("post");
 const errorBuffer = document.getElementById("error");
 const sendPostButton = document.getElementById("post-button");
 const form = document.getElementById("post-form");
+let banned = false;
 
-
-async function deletePost(postId) {  
+async function deletePost(postId) { 
+    if (banned) { return handleError("You are banned from posting."); } 
     const response = await fetch("/deletePost", {
         method: "POST",
         headers: {
@@ -36,12 +37,6 @@ async function isBanned() {
     const json = await result.json();
     return json.status;
 }
-
-isBanned().then(result => {
-  if (result === "true") {
-    document.body.innerHTML = '<p style="text-align:center; font-size: 40px;">You have been banned.</p>';
-  }
-});
 
 function showPostGUI() {
     document.getElementById('post-gui').style.display = "block";
@@ -116,7 +111,10 @@ async function getPosts() {
     }
 }
 
-postButton.addEventListener('click', async function (){ await showPostGUI();});
+postButton.addEventListener('click', async function () { 
+    if (banned) { return handleError("You are banned from posting."); }
+    await showPostGUI();
+});
 document.addEventListener("DOMContentLoaded", () => {
     getPosts();
     document.getElementById("back").addEventListener("click", function(){closePostGUI();});
@@ -125,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // main.
 form.addEventListener("submit", async function (e) {
+    if (banned) { return handleError("You are banned from posting."); }
     e.preventDefault();
 
     const content = document.getElementById("content").value;
@@ -151,7 +150,8 @@ form.addEventListener("submit", async function (e) {
 setInterval(async function() {
     await getPosts();
     const result = await isBanned();
-    if (result === true) {
-        document.getElementById("psa").innerText = "You've been banned.";
+    if (result) {
+        banned = true;
+        document.getElementById("psa").innerText = "You've been banned. You can still view posts, but cannot post or delete.";
     }
 }, 10000);

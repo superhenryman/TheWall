@@ -153,8 +153,8 @@ def retrieve_data():
     return jsonify(rows)
 
 @app.route("/deletePost", methods=["POST"])
-@limiter.limit("3 per minute", key_func=get_uid)
-@limiter.limit("5 per minute", key_func=get_remote_address)
+@limiter.limit("100 per minute", key_func=get_uid)
+@limiter.limit("100 per minute", key_func=get_remote_address)
 def deletePost():
     with get_connection() as conn:
         uid = session.get("uid")
