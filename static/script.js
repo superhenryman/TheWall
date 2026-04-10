@@ -129,7 +129,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("back").addEventListener("click", function(){closePostGUI();});
 
 });
-
+form.addEventListener("input", function() {
+    const content = document.getElementById("content").value;
+    const lengthLabel = document.getElementById("length");
+    lengthLabel.innerText = `${content.length}/500`;
+    if (content.length > 500) {
+        lengthLabel.style.color = "red";
+    }
+});
 // main.
 form.addEventListener("submit", async function (e) {
     if (banned) { return handleError("You are banned from posting."); }
