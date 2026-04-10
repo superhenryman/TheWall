@@ -106,9 +106,9 @@ async function getPosts() {
                 };
                 postEl.appendChild(deleteBtn);
             }
-            const img = document.createElement("img");
-            img.src = "/static/lesbian.png";
-            postEl.appendChild(img);
+            //const img = document.createElement("img");
+            //img.src = "/static/lesbian.png";
+            //postEl.appendChild(img);
             container.appendChild(postEl);
         });
 
@@ -136,7 +136,12 @@ form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const content = document.getElementById("content").value;
-
+    if (content.length === 0) {
+        return handleError("Post content cannot be empty.");
+    }
+    if (content.length > 500) {
+        return handleError("Post content cannot exceed 500 characters.");
+    }
     const response = await fetch("/post", {
         method: "POST",
         headers: {
