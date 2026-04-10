@@ -108,7 +108,7 @@ async function getPosts() {
             }
             const img = document.createElement("img");
             img.src = "/static/lesbian.png";
-
+            postEl.appendChild(img);
             container.appendChild(postEl);
         });
 
