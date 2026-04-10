@@ -152,6 +152,6 @@ setInterval(async function() {
     await getPosts();
     const result = await isBanned();
     if (result === true) {
-        document.getElementsByTagName("body")[0].innerText = "You've been banned.";
+        document.getElementById("psa").innerText = "You've been banned.";
     }
 }, 10000);
